@@ -81,7 +81,7 @@ git remote remove origin
 git remote remove origin 命令只会将你本地 Git 仓库中的远程仓库配置删除，而不会影响 GitHub 上的实际仓库。这个命令只是删除了本地的一个指向远程仓库的别名（通常叫做 "origin"），它不会删除 GitHub 上的仓库或其中的任何文件。
 ""
 重新
-git remote add origin git@github.com:ellicoo/PycharmProjects.git
+git remote add origin git@github.com:ellicoo/Learning_Code.git
 git push origin main
 
 
