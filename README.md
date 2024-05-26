@@ -125,6 +125,7 @@ GitHub 提供了三种主要的合并方式：
 
 Merge pull request(简单的提交)：
     主分支main的代码+从分支dening_dev的cmmit1+commit2+commit3=最新的主分支(保留commit1,2,3的版本状态)：main+从分支dening_dev的cmmit1+commit2+commit3
+
 Squash and merge：
     第一步：对从分支dening_dev的多次提交形成的各个版本先进行合并：(cmmit1+commit2+commit3)=commit
     第二步：合并，主分支main的代码+从分支dening_dev的commit(不保留commit1,2,3形成的版本)
