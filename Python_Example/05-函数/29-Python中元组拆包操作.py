@@ -13,3 +13,10 @@ print(b)
 a, b = (10, 100)
 # 4、在Python中，元组拆包时，右边的小括号也可以省略
 a, b = 10, 100
+
+print('--------列表也可以拆包---------')
+list1 = [1, 2, 5]
+a, b, c = list1
+print(a)
+print(b)
+print(c)

@@ -23,3 +23,7 @@ print(list1)
 # 推导式代码
 list2 = [(i, j) for i in range(1, 3) for j in range(1, 4)]
 print(list2)
+
+# 尝试操作
+# list3 = [(i, j) for i, j in range(1, 3)]  # TypeError: cannot unpack non-iterable int object
+# print(list3)

@@ -1,8 +1,9 @@
 from pyspark.sql import SparkSession
 import os
 
-from cn.mytest.streaming.base.StreamingBaseModel import StreamingBaseModel
+from com.mytest.streaming.base.StreamingBaseModel import StreamingBaseModel
 import pyspark.sql.functions as F
+
 """
 -------------------------------------------------
    Description :	TODO：用户行为模型重构
@@ -19,15 +20,15 @@ os.environ['PYSPARK_DRIVER_PYTHON'] = '/root/anaconda3/envs/pyspark_env/bin/pyth
 
 
 class UserEventModel1(StreamingBaseModel):
-    #对数据进行ETL操作
+    # 对数据进行ETL操作
     def etl_data(self, input_df):
-        #1.把value转换为string类型
+        # 1.把value转换为string类型
         input_df = input_df.selectExpr("cast(value as string)")
-        #2.解析json数据
+        # 2.解析json数据
         input_df = input_df.select(
             F.json_tuple("value", "phone_num", "system_id", "user_name", "user_id", "visit_time", "goods_type",
-                         "minimum_price")
-            .alias("phone_num", "system_id", "user_name", "user_id", "visit_time", "goods_type", "minimum_price"),
+                         "minimum_price") \
+                .alias("phone_num", "system_id", "user_name", "user_id", "visit_time", "goods_type", "minimum_price"),
             F.get_json_object("value", "$.area.province").alias("province"),
             F.get_json_object("value", "$.area.city").alias("city"),
             F.get_json_object("value", "$.area.sp").alias("sp"),
@@ -46,7 +47,7 @@ class UserEventModel1(StreamingBaseModel):
         input_df.printSchema()
         return input_df
 
-    #统计实时指标操作
+    # 统计实时指标操作
     def compute(self, input_df):
         input_df = input_df.groupBy("user_id").agg(
             F.count(F.expr("if(is_browse = 1,user_id,null)")).alias("is_browse_cnt"),
@@ -64,6 +65,7 @@ class UserEventModel1(StreamingBaseModel):
                                        "cast(is_received_cnt as int)")
         input_df.printSchema()
         return input_df
+
 
 if __name__ == '__main__':
     userEventModel = UserEventModel1(master='local[2]',

@@ -26,5 +26,6 @@ print(type(str3))
 
 # 注意：类型转换时，原数据必须是可以转换的有效数据，否则转换失败
 str4 = '7.88'
-num4 = int(str4)
+num4 = float(str4)
 print(num4)
+print(type(num4))

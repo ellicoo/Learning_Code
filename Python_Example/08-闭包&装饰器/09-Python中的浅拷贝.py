@@ -17,3 +17,25 @@ print(list2)
 
 # 注意：切片拷贝也是浅拷贝
 list3 = list1[:]
+print(list3)
+
+
+print('----------深拷贝&浅拷贝-------------')
+# 普通赋值是--浅拷贝
+import copy
+
+# 示例对象
+original_list = [1, 2, [3, 4]]
+
+# 浅拷贝
+shallow_copy = original_list.copy()
+# 深拷贝
+deep_copy = copy.deepcopy(original_list)
+
+# 修改原始对象
+original_list[2][0] = 'modified'
+
+print("Original List:", original_list)       # Output: Original List: [1, 2, ['modified', 4]]
+print("Shallow Copy:", shallow_copy)         # Output: Shallow Copy: [1, 2, ['modified', 4]]
+print("Deep Copy:", deep_copy)               # Output: Deep Copy: [1, 2, [3, 4]]
+

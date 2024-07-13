@@ -7,13 +7,18 @@ func(10, 20, 30)
 ② 关键词参数：没有位置要求，但是传参形式必须采用参数=值方式
 func(a=10, b=20, c=30)
 '''
+
+
 def func(name, age, mobile):
     print(name)
     print(age)
     print(mobile)
+
 
 # 调用时使用位置传参
 func('Tom', 23, '10086')
 
 # 调用时使用关键词传参
 func(name='Tom', age=23, mobile='10086')
+print("--------------")
+func(age=23, name='Tom', mobile='10086')

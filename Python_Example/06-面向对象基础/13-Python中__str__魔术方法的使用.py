@@ -8,6 +8,8 @@ __str__()：默认情况下，当我们使用print(对象)打印对象时，系�
 
 注意：__str__()方法其要求返回的结果必须是一个字符串类型的数据！！！
 '''
+
+
 # 1、定义一个Person类
 class Person(object):
     # 2、定义对象属性与方法
@@ -22,8 +24,9 @@ class Person(object):
     def __str__(self):
         return f"我的名字为{self.name}，年龄{self.age}岁了！"
 
+
 # 4、实例化对象，初始化对象属性
-p1 = Person('Tom',23)
+p1 = Person('Tom', 23)
 # 5、打印对象
 print(p1)
 p1.speak()

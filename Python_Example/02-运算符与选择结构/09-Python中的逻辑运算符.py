@@ -15,8 +15,11 @@ not ：逻辑非，取反，真的就是假的；假的就是真的
 有车 or 有房，牵手成功
 '''
 print(5 > 3 and 3 > 2)  # True and True => True
+print((5 > 3) & (3 > 2))
+
 print(5 > 3 and 3 < 2)  # True and False => False
 
 print(5 > 3 or 3 < 2)  # True or False => True
+print(5 > 3 | 3 > 2)
 
 print(not (5 > 3))  # not True => False

@@ -1,7 +1,7 @@
 from pyspark.sql import SparkSession
 import os
 
-from cn.mytest.tag.base.AbstractBaseModel import AbstractBaseModel
+from com.mytest.tag.base.AbstractBaseModel import AbstractBaseModel
 
 """
 -------------------------------------------------

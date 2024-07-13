@@ -3,4 +3,3 @@
 '''
 print('hello linux')
 print('hello hadoop')
-print('hello python')

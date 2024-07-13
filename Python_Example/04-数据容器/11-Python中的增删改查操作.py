@@ -22,3 +22,11 @@ if '孙悟空' in list1:
     print('exists')
 else:
     print('not exists')
+
+print('------列表合并-------')
+list1 = [1, 2, 3, 4, 5]
+list2 = [3, 4, 5, 6]
+merge_list = list1 + list2
+print(f"list1和list2合并后的的列表：{merge_list}")
+print(f"list1和list2合并且去重后的的列表：{list(set(merge_list))}")
+

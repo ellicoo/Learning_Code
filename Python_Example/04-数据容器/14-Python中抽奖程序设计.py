@@ -6,6 +6,6 @@ import random
 # 1、定义一个列表，包含'曹操', '刘备', '关羽', '大乔', '吕布'几个元素
 list1 = ['曹操', '刘备', '关羽', '大乔', '吕布']
 # 2、使用Python随机抽取一个元素，随机数概念 => random.randint()生成一个随机索引
-rand_index = random.randint(0, len(list1)-1)
+rand_index = random.randint(0, len(list1) - 1)
 # 3、基于随机索引获取对应的元素
 print(list1[rand_index])

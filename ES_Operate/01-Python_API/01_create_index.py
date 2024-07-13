@@ -9,14 +9,5 @@ try:
 except Exception as e:
     print(f"An error occurred: {e}")
 
-
 """索引名index_shopping,ignore=400，表示忽视400这个错误，如果存在index_shopping时，会返回400"""
-es.indices.create(index='index_shopping',ignore=400)
-
-
-
-
-
-
-
-
+es.indices.create(index='index_shopping', ignore=400)

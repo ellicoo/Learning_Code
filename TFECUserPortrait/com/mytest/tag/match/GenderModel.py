@@ -3,7 +3,7 @@ import os
 
 from pyspark.sql.types import StringType
 
-from cn.mytest.tag.bean.EsMeta import tagRuleStrToEsMeta, EsMeta
+from com.mytest.tag.bean.EsMeta import tagRuleStrToEsMeta, EsMeta
 import pyspark.sql.functions as F
 
 """

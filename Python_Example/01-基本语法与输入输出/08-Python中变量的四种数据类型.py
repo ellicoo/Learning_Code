@@ -22,3 +22,6 @@ print(type(c))
 # 4、定义字符串类型
 d = 'python'
 print(type(d))
+
+e = "java"
+print(type(e))

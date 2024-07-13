@@ -10,3 +10,25 @@ xxx
 print(c1)  # 牛奶
 print(c2)  # 可乐
 '''
+
+c1 = "牛奶"
+c2 = "可乐"
+# c1 = c2
+# c2 = c3
+# print(c1)
+# print(c2)
+
+
+# c3 = ''
+# 先把先把c1存在c3中
+# c3 = c1
+# c1 = c2
+# c2 = c3
+# #
+# print(c1)
+# print(c2)
+
+
+c1, c2 = c2, c1
+print(c1)
+print(c2)

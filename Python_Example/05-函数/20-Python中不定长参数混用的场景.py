@@ -27,4 +27,8 @@ def func(*args, **kwargs):
 list1 = [1, 2, 3]
 dict2 = {'a':4, 'b':5}
 # 3、调用函数获取最终结果
+#
 print(func(*list1, **dict2))
+
+print("------------------")
+# print(func(list1, dict2)) # unsupported operand type(s) for +=: 'int' and 'list'

@@ -22,5 +22,6 @@ result
 
 # 案例2：从字符串中匹配所有的非数字字符
 import re
+
 result = re.findall('\D', 'a1b2c3d4e5f6')
 print(result)

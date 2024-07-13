@@ -177,7 +177,7 @@ spark的核心是由rdd实现的：即rdd是spark最核心的抽象对象
 2）依赖类型：
 窄依赖：父rdd的一个分区，【全部】将数据发给子rdd的一个分区
 宽依赖(shuffle依赖)：父rdd的一个分区，将数据发给子rdd的多个分区--简单判断：看父rdd有没有分叉出数据给子rdd的多个分区
-宽依赖别名：shufful
+宽依赖别名：shuffull
 宽依赖通常发生在groupByKey、reduceByKey、join等需要数据重组或混合的操作上。
 
 在stage内部，一定都是：窄依赖(阶段内数据比较规整)
@@ -290,6 +290,20 @@ MapReduce 框架会自动把 ReduceTask 生成的<key, value>传入 OutputFormat
 
 计算复杂任务时：【读磁盘(hdfs) -> map(mapTask) -> shuffle ->reduce(reduceTask) ->写磁盘】--（磁盘IO）--> 【读磁盘(hdfs) -> map(mapTask) -> shuffle ->reduce(reduceTask) ->写磁盘】
 
+
+spark的Catalyst 是 Spark SQL 中的查询优化器：
+Catalyst 优化器会优化传递调用的情况，通过合并操作和优化执行计划来提高性能。然而，对于重复调用的情况，
+Catalyst 优化器无法自动缓存中间结果。因此，如果一个中间结果在多个地方被重复使用，
+手动使用 persist(StorageLevel.MEMORY_AND_DISK) 或其他适当的缓存策略是必要的。
+
+Catalyst 优化器的作用：
+Catalyst 优化器主要负责以下几方面的优化：
+
+1.谓词下推：将过滤条件尽量推到数据源读取时执行，减少数据量。
+2.投影修剪：只读取和处理必要的列。
+3.操作合并：将多个连续的操作合并为一个操作。
+4.重排序：根据代价模型重排序操作，优化查询计划。
+然而，Catalyst 优化器并不会自动检测到数据帧被多次使用的情况并自动进行缓存。因此，对于需要重复使用的中间结果，手动缓存是提高性能的关键步骤
 """
 # AppName:应用名称
 # Master:Spark的运行模式，这里指定以Local模式运行
@@ -333,7 +347,7 @@ sc = SparkContext(conf=conf)
 
 # 2.数据输入--读取外部数据源--使用SparkContext类的textFile方法将外部数据映射成rdd类的对象并返回该rdd对象。这个
 # rdd对象的元素是多行的数据组成的分区，存在行符的
-input_rdd = sc.textFile(get_absolute_path("../data/word.txt"),100)
+input_rdd = sc.textFile(get_absolute_path("../data/word.txt"), 100)
 # 也可以使用本地集合转分布式的方式创建并行的rdd集合
 
 # 3.数据处理--使用合适的API处理数据
@@ -344,7 +358,7 @@ result_rdd = input_rdd.flatMap(lambda line: line.split(" ")) \
 
 # 4.数据输出
 result_rdd.foreach(lambda x: print(x))
-print('分区数：',input_rdd.getNumPartitions())
+print('分区数：', input_rdd.getNumPartitions())
 # textFile中最小分区数是个参考值，spark有自己的判断，本例中忽略了最小分区100的条件
 # 给的太大，或者太小都不会影响
 

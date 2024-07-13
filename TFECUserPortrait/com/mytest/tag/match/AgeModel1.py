@@ -3,7 +3,7 @@ import os
 
 from pyspark.sql.types import StringType
 
-from cn.mytest.tag.base.AbstractBaseModel import AbstractBaseModel
+from com.mytest.tag.base.AbstractBaseModel import AbstractBaseModel
 import pyspark.sql.functions as F
 
 """

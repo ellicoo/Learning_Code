@@ -7,8 +7,9 @@ import os
 
 from pyspark.sql.types import StringType
 
-from cn.mytest.streaming.base.StreamingBaseModel import StreamingBaseModel
+from com.mytest.streaming.base.StreamingBaseModel import StreamingBaseModel
 import pyspark.sql.functions as F
+
 """
 -------------------------------------------------
    Description :	TODO：NginxAccess访问基类重构
@@ -22,6 +23,7 @@ os.environ['JAVA_HOME'] = '/export/server/jdk1.8.0_241/'
 os.environ['SPARK_HOME'] = '/export/server/spark'
 os.environ['PYSPARK_PYTHON'] = '/root/anaconda3/envs/pyspark_env/bin/python'
 os.environ['PYSPARK_DRIVER_PYTHON'] = '/root/anaconda3/envs/pyspark_env/bin/python'
+
 
 # 自定义的的函数，用于时间类型转换
 @F.udf(returnType=StringType())
@@ -44,6 +46,7 @@ def ip_to_address(ipStr):
         print("-------------IP地址解析异常--------------")
         return "未知地址"
 
+
 @F.udf(returnType=StringType())
 def parse_user_agent(useragent):
     userAgent = user_agents.parse(useragent)
@@ -54,13 +57,13 @@ def parse_user_agent(useragent):
 
 
 class NginxAccessModel1(StreamingBaseModel):
-    #1.对数据进行ETL操作
+    # 1.对数据进行ETL操作
     def etl_data(self, input_df):
-        #1.对Kafka的数据进行转换
+        # 1.对Kafka的数据进行转换
         input_df = input_df.selectExpr("cast(value as string)")
-        #定义正则表达式
+        # 定义正则表达式
         regexp = '(?<ip>\d+\.\d+\.\d+\.\d+) (- - \[)(?<datetime>[\s\S]+)(?<t1>\][\s"]+)(?<request>[A-Z]+) (?<url>[\S]*) (?<protocol>[\S]+)["] (?<code>\d+) (?<sendbytes>\d+) ["](?<refferer>[\S]*) ["](?<useragent>[\S\s]+)["] ["](?<proxyaddr>[\S\s]+)["]'
-        #正则处理
+        # 正则处理
         input_df = input_df.select(F.regexp_extract("value", regexp, 1).alias("ip"),
                                    F.regexp_extract("value", regexp, 3).alias("datetime"),
                                    F.regexp_extract("value", regexp, 5).alias("request"),
@@ -72,13 +75,13 @@ class NginxAccessModel1(StreamingBaseModel):
                                    F.regexp_extract("value", regexp, 11).alias("useragent"),
                                    F.regexp_extract("value", regexp, 12).alias("proxyaddr"))
 
-        #2.转换时间
+        # 2.转换时间
         input_df = input_df.withColumn("datetime", parse_access_time("datetime"))
 
-        #3.IP解析
+        # 3.IP解析
         input_df = input_df.withColumn("area", ip_to_address("ip"))
 
-        #4.UA解析
+        # 4.UA解析
         input_df = input_df.withColumn("os", F.split(parse_user_agent("useragent"), ',')[0].alias("os")) \
             .withColumn("device", F.split(parse_user_agent("useragent"), ',')[1].alias("device")) \
             .withColumn("browser", F.split(parse_user_agent("useragent"), ',')[2].alias("browser"))
@@ -87,8 +90,7 @@ class NginxAccessModel1(StreamingBaseModel):
 
         return input_df
 
-
-    #对数据进行统计分析
+    # 对数据进行统计分析
     def compute(self, input_df):
         input_df = input_df.groupBy("ip") \
             .agg(F.count("ip").alias("pv"),
@@ -116,9 +118,9 @@ class NginxAccessModel1(StreamingBaseModel):
 
 
 if __name__ == '__main__':
-    #20221013：10条，offset=10
-    #20221015：10条，offset=10 + 10 = 20
-    #20221014：16678条，offset=16678 + 20 = 16698
+    # 20221013：10条，offset=10
+    # 20221015：10条，offset=10 + 10 = 20
+    # 20221014：16678条，offset=16678 + 20 = 16698
     nginxAccess = NginxAccessModel1(master='local[2]',
                                     appName='NginxAccessModel1',
                                     numPartitions=4,

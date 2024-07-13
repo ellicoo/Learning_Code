@@ -13,7 +13,7 @@ num = 10
 # 2、定义一个函数
 def func():
     # 声明全局变量
-    global num
+    # global num
     # 基于global声明的全局变量，对其进行修改
     num = 100
 

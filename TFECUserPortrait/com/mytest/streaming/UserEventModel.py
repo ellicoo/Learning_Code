@@ -67,23 +67,24 @@ input_df = input_df.selectExpr("cast(value as string)")
 }
 """
 
-#json解析
-input_df = input_df.select(F.json_tuple("value","phone_num","system_id","user_name","user_id","visit_time","goods_type","minimum_price")
-                .alias("phone_num","system_id","user_name","user_id","visit_time","goods_type","minimum_price"),
-                F.get_json_object("value","$.area.province").alias("province"),
-                F.get_json_object("value","$.area.city").alias("city"),
-                F.get_json_object("value","$.area.sp").alias("sp"),
-                F.get_json_object("value","$.user_behavior.is_browse").alias("is_browse"),
-                F.get_json_object("value","$.user_behavior.is_order").alias("is_order"),
-                F.get_json_object("value","$.user_behavior.is_buy").alias("is_buy"),
-                F.get_json_object("value","$.user_behavior.is_back_order").alias("is_back_order"),
-                F.get_json_object("value","$.user_behavior.is_received").alias("is_received"),
-                F.get_json_object("value","$.goods_detail.goods_name").alias("goods_name"),
-                F.get_json_object("value","$.goods_detail.browse_page").alias("browse_page"),
-                F.get_json_object("value","$.goods_detail.browse_time").alias("browse_time"),
-                F.get_json_object("value","$.goods_detail.to_page").alias("to_page"),
-                F.get_json_object("value","$.goods_detail.to_time").alias("to_time"),
-                F.get_json_object("value","$.goods_detail.page_keywords").alias("page_keywords"))
+# json解析
+input_df = input_df.select(
+    F.json_tuple("value", "phone_num", "system_id", "user_name", "user_id", "visit_time", "goods_type", "minimum_price")
+    .alias("phone_num", "system_id", "user_name", "user_id", "visit_time", "goods_type", "minimum_price"),
+    F.get_json_object("value", "$.area.province").alias("province"),
+    F.get_json_object("value", "$.area.city").alias("city"),
+    F.get_json_object("value", "$.area.sp").alias("sp"),
+    F.get_json_object("value", "$.user_behavior.is_browse").alias("is_browse"),
+    F.get_json_object("value", "$.user_behavior.is_order").alias("is_order"),
+    F.get_json_object("value", "$.user_behavior.is_buy").alias("is_buy"),
+    F.get_json_object("value", "$.user_behavior.is_back_order").alias("is_back_order"),
+    F.get_json_object("value", "$.user_behavior.is_received").alias("is_received"),
+    F.get_json_object("value", "$.goods_detail.goods_name").alias("goods_name"),
+    F.get_json_object("value", "$.goods_detail.browse_page").alias("browse_page"),
+    F.get_json_object("value", "$.goods_detail.browse_time").alias("browse_time"),
+    F.get_json_object("value", "$.goods_detail.to_page").alias("to_page"),
+    F.get_json_object("value", "$.goods_detail.to_time").alias("to_time"),
+    F.get_json_object("value", "$.goods_detail.page_keywords").alias("page_keywords"))
 
 """
 需求：
@@ -94,37 +95,39 @@ input_df = input_df.select(F.json_tuple("value","phone_num","system_id","user_na
     统计每个用户主动点击收货行为总数
 """
 
-#select()
-#selectExpr()
-#expr(sql)
-#count:可以统计结果为0的值，但是不会统计结果为null的值。
-#sum:不会统计结果为null和为0的值
+# select()
+# selectExpr()
+# expr(sql)
+# count:可以统计结果为0的值，但是不会统计结果为null的值。
+# sum:不会统计结果为null和为0的值
 input_df = input_df.groupBy("user_id").agg(F.count(F.expr("if(is_browse = 1,user_id,null)")).alias("is_browse_cnt"),
-                                F.count(F.expr("if(is_order = 1,user_id,null)")).alias("is_order_cnt"),
-                                F.count(F.expr("if(is_buy = 1,user_id,null)")).alias("is_buy_cnt"),
-                                F.count(F.expr("if(is_back_order = 1,user_id,null)")).alias("is_back_order_cnt"),
-                                F.count(F.expr("if(is_received = 1,user_id,null)")).alias("is_received_cnt"))
+                                           F.count(F.expr("if(is_order = 1,user_id,null)")).alias("is_order_cnt"),
+                                           F.count(F.expr("if(is_buy = 1,user_id,null)")).alias("is_buy_cnt"),
+                                           F.count(F.expr("if(is_back_order = 1,user_id,null)")).alias(
+                                               "is_back_order_cnt"),
+                                           F.count(F.expr("if(is_received = 1,user_id,null)")).alias("is_received_cnt"))
 
-#修改指标结果类型
+# 修改指标结果类型
 input_df = input_df.selectExpr("user_id",
-                    "cast(is_browse_cnt as int)",
-                    "cast(is_order_cnt as int)",
-                    "cast(is_buy_cnt as int)",
-                    "cast(is_back_order_cnt as int)",
-                    "cast(is_received_cnt as int)")
+                               "cast(is_browse_cnt as int)",
+                               "cast(is_order_cnt as int)",
+                               "cast(is_buy_cnt as int)",
+                               "cast(is_back_order_cnt as int)",
+                               "cast(is_received_cnt as int)")
 
 input_df.printSchema()
 
-#采用批量写入到MySQL的方式
-def saveToMySQL(batch_df:DataFrame,batch_id):
+
+# 采用批量写入到MySQL的方式
+def saveToMySQL(batch_df: DataFrame, batch_id):
     batch_df.write.jdbc(url='jdbc:mysql://up01:3306/tfec_app',
                         table='user_event_result',
                         mode='overwrite',
-                        properties={"user":"root","password":"123456"})
+                        properties={"user": "root", "password": "123456"})
 
-#写出结果到MySQL中
+
+# 写出结果到MySQL中
 input_df.writeStream.outputMode("complete").foreachBatch(saveToMySQL).start()
 
-#结果输出到console
+# 结果输出到console
 input_df.writeStream.format("console").outputMode("complete").start().awaitTermination()
-

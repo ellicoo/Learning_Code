@@ -15,3 +15,5 @@ print(func1(10, 20))
 # lambda表达式
 func2 = lambda num1, num2: num1 + num2
 print(func2(10, 20))
+
+print((lambda x, y: x + y)(10, 30))

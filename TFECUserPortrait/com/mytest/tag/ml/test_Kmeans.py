@@ -43,6 +43,7 @@ spark = SparkSession \
 if __name__ == '__main__':
     # 1-Loads data.
     dataset = spark.read.format("libsvm").load("./data/mllib/sample_kmeans_data.txt")
+    # dataset = spark.read.format("libsvm").load("/Users/otis/Learning_Code/TFECUserPortrait/com/mytest/tag/ml/data/mllib/sample_kmeans_data.txt")
 
     # 2-Trains a k-means model.
     kmeans = KMeans().setK(2).setSeed(1)

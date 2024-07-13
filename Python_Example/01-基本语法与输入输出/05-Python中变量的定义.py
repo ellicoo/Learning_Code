@@ -15,3 +15,4 @@ password = '123456'
 # 2、打印变量
 print(username)
 print(password)
+

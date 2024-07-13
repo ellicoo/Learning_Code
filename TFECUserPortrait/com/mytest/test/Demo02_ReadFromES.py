@@ -27,14 +27,14 @@ spark = SparkSession \
     .getOrCreate()
 
 # 2.数据输入
-#es.resource：es的索引库
-#es.nodes：es的节点信息
-#es.read.field.include：指定读取es中的哪些字段
-input_df = spark.read\
-    .format("es")\
-    .option("es.resource","hive_test")\
-    .option("es.nodes","up01:9200")\
-    .option("es.read.field.include","id,name")\
+# es.resource：es的索引库
+# es.nodes：es的节点信息
+# es.read.field.include：指定读取es中的哪些字段
+input_df = spark.read \
+    .format("es") \
+    .option("es.resource", "hive_test") \
+    .option("es.nodes", "up01:9200") \
+    .option("es.read.field.include", "id,name") \
     .load()
 
 # 3.数据处理

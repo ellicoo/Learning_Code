@@ -36,4 +36,5 @@ def tagRuleStrToEsMeta(tagRule: str):
     return kvDict
 
 
-tagRuleStrToEsMeta(tagRule)  # 测试用的，生产环境不会被调用
+return_data = tagRuleStrToEsMeta(tagRule)  # 测试用的，生产环境不会被调用
+print(return_data)

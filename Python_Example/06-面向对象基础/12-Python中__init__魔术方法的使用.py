@@ -9,6 +9,8 @@ __init__()：初始化方法（在其他编程语言中，也称之为叫做构�
 
 小结：在实际工作中，我们可以通过__init__()魔术方法实现初始化操作！！！
 '''
+
+
 # 1、定义一个Person类
 class Person(object):
     # 2、为其定义成员属性
@@ -21,8 +23,10 @@ class Person(object):
     # 3、为其定义成员方法
     def eat(self):
         print('我喜欢吃零食')
+
     def drink(self):
         print('我喜欢喝果汁')
+
 
 # 4、实例化对象
 p1 = Person('Tom', 23)
